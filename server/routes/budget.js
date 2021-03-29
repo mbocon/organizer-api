@@ -1,62 +1,62 @@
 const express = require('express');
 const router = express.Router();
-const { Workout } = require('../models/Workout');
+const { Budget } = require('../models/Budget');
 const e = require('express');
 
 //=================================
-//             WORKOUTS
+//             Budget
 //=================================
 
-router.get('/getworkouts', (req, res) => {
-	Workout.find({}, function (err, workouts) {
+router.get('/:userId/getBudgets', (req, res) => {
+	Budget.find({}, function (err, budgets) {
 		if (err) {
 			res.send(err);
 			return;
 		}
-		res.json(workouts);
+		res.json(budgets);
 	});
 });
 
 router.get('/:id', (req, res) => {
-	Workout.findById(req.params.id, function (err, workout) {
+	Budget.findById(req.params.id, function (err, budget) {
 		if (err) {
 			res.send(err);
 			return;
 		}
-		res.json(workout);
+		res.json(budget);
 	});
 });
 
 router.post('/create', (req, res) => {
-	console.log(req.body, 'from create workout');
-	const workout = new Workout(req.body);
+	console.log(req.body, 'from create Budget route');
+	const budget = new Budget(req.body);
 
-	workout.save((err, workout) => {
+	budget.save((err, budget) => {
 		if (err) return res.json({ success: false, err });
 		return res.status(200).json({
 			success: true,
-			workout: workout,
+			Budget: budget,
 		});
 	});
 });
 
-router.delete('/:userId/:id', (req, res) => {
-	Workout.findById(req.params.id, function (err, post) {
-		if (post.user.toString() === req.params.userId) {
-			post.remove();
+router.delete('/delete/:userId/:id', (req, res) => {
+	Budget.findById(req.params.id, function (err, item) {
+		if (item.user.toString() === req.params.userId) {
+			item.remove();
 			res.json('Delete success');
 		} else {
-			res.json('User unauthorized');
+			res.json('User unauthorized', err);
 		}
 	});
 });
 
 router.put('/:id/:exerciseId', (req, res) => {
-	Workout.findById(req.params.id)
-	.then((workout)=> {
-		console.log(workout, 'is the workout')
+	Budget.findById(req.params.id)
+	.then((Budget)=> {
+		console.log(Budget, 'is the Budget')
 		console.log(req.params.exerciseId)
-		workout.plan.map(exercise => {
+		Budget.plan.map(exercise => {
 			console.log(exercise, 'is the exer')
 			if(exercise._id === req.params.exerciseId){
 				console.log(exercise, 'is BEFORE')
@@ -69,10 +69,10 @@ router.put('/:id/:exerciseId', (req, res) => {
 				// exercise.save()
 			}
 		})
-		console.log(workout, 'on 73')
-		// workout.save()
-		// res.send(workout)
-	}).then((workout)=>res.json(workout.save()))
+		console.log(Budget, 'on 73')
+		// Budget.save()
+		// res.send(Budget)
+	}).then((Budget)=>res.json(Budget.save()))
 	.catch(err => res.status(400).send(err))
 });
 
