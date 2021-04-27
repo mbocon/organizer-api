@@ -49,29 +49,13 @@ router.delete('/delete/:userId/:id', (req, res) => {
 	});
 });
 
-// router.put('/:id/:exerciseId', (req, res) => {
-// 	Budget.findById(req.params.id)
-// 	.then((Budget)=> {
-// 		console.log(Budget, 'is the Budget')
-// 		console.log(req.params.exerciseId)
-// 		Budget.plan.map(exercise => {
-// 			console.log(exercise, 'is the exer')
-// 			if(exercise._id === req.params.exerciseId){
-// 				console.log(exercise, 'is BEFORE')
-// 				exercise.activity = req.body.activity;
-// 				exercise.distance = req.body.distance;
-// 				exercise.sets = req.body.sets;
-// 				exercise.reps = req.body.reps;
-// 				exercise.weight = req.body.weight;
-// 				console.log(exercise, 'is AFTER')
-// 				// exercise.save()
-// 			}
-// 		})
-// 		console.log(Budget, 'on 73')
-// 		// Budget.save()
-// 		// res.send(Budget)
-// 	}).then((Budget)=>res.json(Budget.save()))
-// 	.catch(err => res.status(400).send(err))
-// });
+router.put('/:userId/:id', (req, res) => {
+	Todo.findByIdAndUpdate(req.params.id,  req.body, (err, updatedItem) => {
+		if(err) {
+			console.log(err, 'is  the  err')
+		}
+		res.json('successful update')
+	})
+});
 
 module.exports = router;
