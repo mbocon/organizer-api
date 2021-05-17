@@ -28,12 +28,20 @@ router.get('/:userId/getTodos', (req, res) => {
 // });
 
 router.post('/create', (req, res) => {
+	let oldDate = req.body.date;
+	let month = oldDate.substr(5, 3);
+	let day = oldDate.substr(8, 2);
+	day = day + '-';
+	let year = oldDate.substr(0, 4);
+	let newDate = month + day + year;
+	req.body.date = newDate;
+	
 	const todo = new Todo(req.body);
 	todo.save((err, todo) => {
 		if (err) return res.json({ success: false, err });
 		return res.status(200).json({
 			success: true,
-			task: todo
+			task: todo,
 		});
 	});
 });
@@ -50,12 +58,19 @@ router.delete('/delete/:userId/:id', (req, res) => {
 });
 
 router.put('/:userId/:id', (req, res) => {
-	Todo.findByIdAndUpdate(req.params.id,  req.body, (err, updatedItem) => {
-		if(err) {
-			console.log(err, 'is  the  err')
+	let oldDate = req.body.date;
+	let month = oldDate.substr(5, 3);
+	let day = oldDate.substr(8, 2);
+	day = day + '-';
+	let year = oldDate.substr(0, 4);
+	let newDate = month + day + year;
+	req.body.date = newDate;
+	Todo.findByIdAndUpdate(req.params.id, req.body, (err, updatedItem) => {
+		if (err) {
+			console.log(err, 'is  the  err');
 		}
-		res.json('successful update')
-	})
+		res.json('successful update');
+	});
 });
 
 module.exports = router;

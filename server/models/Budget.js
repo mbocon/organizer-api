@@ -8,7 +8,7 @@ const budgetSchema = mongoose.Schema({
         type: String
     },
     value: {
-        type: String
+        type: Number
     },
     name: {
         type: String

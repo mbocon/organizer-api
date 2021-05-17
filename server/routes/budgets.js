@@ -29,6 +29,13 @@ router.get('/:id', (req, res) => {
 
 router.post('/create', (req, res) => {
 	console.log(req.body, 'from create Budget route');
+	let oldDate = req.body.date;
+	let month = oldDate.substr(5, 3);
+	let day = oldDate.substr(8, 2);
+	day = day + '-';
+	let year = oldDate.substr(0, 4);
+	let newDate = month + day + year;
+	req.body.date = newDate;
 	const budget = new Budget(req.body);
 
 	budget.save((err, budget) => {
@@ -51,28 +58,20 @@ router.delete('/delete/:userId/:id', (req, res) => {
 	});
 });
 
-router.put('/:id/:exerciseId', (req, res) => {
-	Budget.findById(req.params.id)
-	.then((Budget)=> {
-		console.log(Budget, 'is the Budget')
-		console.log(req.params.exerciseId)
-		Budget.plan.map(exercise => {
-			console.log(exercise, 'is the exer')
-			if(exercise._id === req.params.exerciseId){
-				console.log(exercise, 'is BEFORE')
-				exercise.activity = req.body.activity;
-				exercise.distance = req.body.distance;
-				exercise.sets = req.body.sets;
-				exercise.reps = req.body.reps;
-				exercise.weight = req.body.weight;
-				console.log(exercise, 'is AFTER')
-				// exercise.save()
-			}
-		})
-		console.log(Budget, 'on 73')
-		// Budget.save()
-		// res.send(Budget)
-	}).then((Budget)=>res.json(Budget.save()))
+router.put('/:itemId/update', (req, res) => {
+	console.log(req.body, 'IS MY UPDATE REQ BODY')
+	console.log(req.body.type, 'is req type')
+	let oldDate = req.body.date;
+	let month = oldDate.substr(5, 3);
+	let day = oldDate.substr(8, 2);
+	day = day + '-';
+	let year = oldDate.substr(0, 4);
+	let newDate = month + day + year;
+	req.body.date = newDate;
+	Budget.findByIdAndUpdate(req.params.itemId, req.body, (err, updated)=>{
+		console.log(updated, 'is the updated item')
+		res.json('success')
+	})
 	.catch(err => res.status(400).send(err))
 });
 
