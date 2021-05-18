@@ -13,7 +13,8 @@ router.get('/:userId/getBudgets', (req, res) => {
 			res.send(err);
 			return;
 		}
-		res.json(budgets);
+		const filteredBudgets = budgets.filter(budget => budget.user.includes(req.params.userId))
+		res.json(filteredBudgets);
 	});
 });
 

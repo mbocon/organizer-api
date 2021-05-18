@@ -13,7 +13,8 @@ router.get('/:userId/getTodos', (req, res) => {
 			res.send(err);
 			return;
 		}
-		res.json(todos);
+		const filteredTodos = todos.filter(todo => todo.user.includes(req.params.userId));
+		res.json(filteredTodos);
 	});
 });
 
@@ -35,7 +36,7 @@ router.post('/create', (req, res) => {
 	let year = oldDate.substr(0, 4);
 	let newDate = month + day + year;
 	req.body.date = newDate;
-	
+
 	const todo = new Todo(req.body);
 	todo.save((err, todo) => {
 		if (err) return res.json({ success: false, err });
